@@ -14,8 +14,8 @@
                 <div class="flex" v-for="n, i in createBoard.height">
                     <div v-for="m, j in createBoard.width" @click="createBoard.toggleCell(i, j)"
                         class="w-10 h-10 border-neutral-800 border-2 cursor-pointer"
-                        :class="{'bg-neutral-800' : createBoard.board[i][j] == '#'}">
-                        {{createBoard.board[i][j]}}
+                        :class="{'bg-neutral-800' : createBoard.board[i][j].isBlack}">
+                        {{createBoard.board[i][j].definitionNumber}}
                     </div>
                 </div>
             </div>
