@@ -1,21 +1,35 @@
 import { defineStore } from "pinia";
-import { Cell, emptyCell } from "~/models/cell";
+import { Cell } from "~/models/cell";
 
 export const useCreateBoard = defineStore("createBoard", {
-  state: (): { board: Cell[][]; width: number; height: number } => ({
-    board: new Array(100)
-      .fill(null)
-      .map(() => Array.from({ length: 100 }, () => new Cell("", false, null))),
-    width: 20,
-    height: 15,
+  state: (): {
+    board: Cell[][];
+    width: number;
+    height: number;
+    blackCellsMode: boolean;
+  } => ({
+    board: new Array(40).fill(null).map(() =>
+      Array.from({ length: 40 }, () => {
+        return { isBlack: false, content: "", definitionNumber: null };
+      })
+    ),
+    width: 15,
+    height: 12,
+    blackCellsMode: true,
   }),
   getters: {
     horizontals: (state) => "",
   },
   actions: {
+    toggleMode() {
+      this.blackCellsMode = !this.blackCellsMode;
+    },
     toggleCell(x: number, y: number) {
       this.board[x][y].isBlack = !this.board[x][y].isBlack;
       this.calcCellsDefinitions();
+    },
+    setCellContent(x: number, y: number, content: string) {
+      this.board[x][y].content = content;
     },
     addRow() {
       this.height++;
@@ -23,10 +37,9 @@ export const useCreateBoard = defineStore("createBoard", {
     removeRow() {
       if (this.height > 2) {
         this.height--;
-        this.board[this.height] = Array.from(
-          { length: 100 },
-          () => new Cell("", false, null)
-        );
+        this.board[this.height] = Array.from({ length: 40 }, () => {
+          return { isBlack: false, content: "", definitionNumber: null };
+        });
       }
     },
     addColumn() {
@@ -36,7 +49,11 @@ export const useCreateBoard = defineStore("createBoard", {
       if (this.width > 2) {
         this.width--;
         this.board.forEach((row: Cell[]) => {
-          row[this.width] = new Cell("", false, null);
+          row[this.width] = {
+            isBlack: false,
+            content: "",
+            definitionNumber: null,
+          };
         });
       }
     },
