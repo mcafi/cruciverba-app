@@ -18,7 +18,57 @@ export const useCreateBoard = defineStore("createBoard", {
     blackCellsMode: true,
   }),
   getters: {
-    horizontals: (state) => "",
+    horizontals: (state) => {
+      let h = [];
+      for (let i = 0; i < state.height; i++) {
+        let j = 0;
+        while (j < state.width) {
+          if (
+            state.board[i][j].definitionNumber != null &&
+            !state.board[i][j + 1].isBlack
+          ) {
+            const def = {
+              definitionNumber: state.board[i][j].definitionNumber,
+              val: "",
+            };
+            while (j < state.width && !state.board[i][j].isBlack) {
+              def.val += !!state.board[i][j].content
+                ? state.board[i][j].content
+                : "_";
+              j++;
+            }
+            h.push(def);
+            j++;
+          }
+          j++;
+        }
+      }
+      return h;
+    },
+    verticals: (state) => {
+      let v = [];
+      for (let j = 0; j < state.width; j++) {
+        let i = 0
+        while (i < state.height) {
+          if (state.board[i][j].definitionNumber != null && !state.board[i+1][j].isBlack) {
+            const def = {
+              definitionNumber: state.board[i][j].definitionNumber,
+              val: "", 
+            }
+            while (i < state.height && !state.board[i][j].isBlack) {
+              def.val += !!state.board[i][j].content
+                ? state.board[i][j].content
+                : "_";
+              i++;
+            }
+            v.push(def);
+            i++
+          }
+          i++
+        }
+      }
+      return v
+    }
   },
   actions: {
     toggleMode() {
