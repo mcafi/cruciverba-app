@@ -2,6 +2,12 @@ import { defineStore } from "pinia";
 import { Cell } from "~/models/cell";
 import { Definition } from "~~/models/definition";
 
+const BOARD_MAX_ROWS = 50
+const BOARD_MAX_COLS = 50
+
+const BOARD_DEFAULT_ROWS = 8
+const BOARD_DEFAULT_COLS = 12
+
 export const useCreateBoard = defineStore("createBoard", {
   state: (): {
     board: Cell[][];
@@ -10,13 +16,13 @@ export const useCreateBoard = defineStore("createBoard", {
     blackCellsMode: boolean;
     highlightedCell: { x: number | null; y: number | null };
   } => ({
-    board: new Array(40).fill(null).map(() =>
-      Array.from({ length: 40 }, () => {
+    board: new Array(BOARD_MAX_ROWS).fill(null).map(() =>
+      Array.from({ length: BOARD_MAX_COLS }, () => {
         return { isBlack: false, content: "", definitionNumber: null };
       })
     ),
-    width: 12,
-    height: 9,
+    width: BOARD_DEFAULT_COLS,
+    height: BOARD_DEFAULT_ROWS,
     blackCellsMode: true,
     highlightedCell: { x: null, y: null },
   }),
@@ -96,7 +102,7 @@ export const useCreateBoard = defineStore("createBoard", {
     removeRow() {
       if (this.height > 2) {
         this.height--;
-        this.board[this.height] = Array.from({ length: 40 }, () => {
+        this.board[this.height] = Array.from({ length: BOARD_MAX_COLS }, () => {
           return { isBlack: false, content: "", definitionNumber: null };
         });
       }
