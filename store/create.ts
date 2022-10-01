@@ -8,6 +8,7 @@ export const useCreateBoard = defineStore("createBoard", {
     width: number;
     height: number;
     blackCellsMode: boolean;
+    highlightedCell: { x: number | null; y: number | null };
   } => ({
     board: new Array(40).fill(null).map(() =>
       Array.from({ length: 40 }, () => {
@@ -17,6 +18,7 @@ export const useCreateBoard = defineStore("createBoard", {
     width: 12,
     height: 9,
     blackCellsMode: true,
+    highlightedCell: { x: null, y: null },
   }),
   getters: {
     horizontals: (state): Definition[] => {
@@ -79,7 +81,11 @@ export const useCreateBoard = defineStore("createBoard", {
     toggleCell(x: number, y: number) {
       this.board[x][y].isBlack = !this.board[x][y].isBlack;
       this.board[x][y].content = "";
+      this.highlightedCell = { x: null, y: null };
       this.calcCellsDefinitions();
+    },
+    setHighlightedCell(x: number, y: number) {
+      this.highlightedCell = { x, y };
     },
     setCellContent(x: number, y: number, content: string) {
       this.board[x][y].content = content;
