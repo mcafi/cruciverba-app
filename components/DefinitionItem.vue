@@ -6,8 +6,7 @@
 </template>
 
 <script setup lang="ts">import { Definition } from '~~/models/definition';
-
-    defineProps<{
-        definition: Definition
-    }>()
+defineProps<{
+    definition: Definition
+}>()
 </script>

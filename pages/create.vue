@@ -14,16 +14,7 @@
         <div class="flex align-center justify-center p-20">
             <div class="bg-white border-2 border-neutral-800 text-neutral-800">
                 <div class="flex" v-for="n, i in createBoard.height">
-                    <div v-for="m, j in createBoard.width" @click="handleClick(i, j)"
-                        class="w-12 h-12 border-neutral-800 border-2 cursor-pointer flex align-stretch justify-center relative"
-                        :class="{'bg-yellow-300': createBoard.highlightedCell.x == i && createBoard.highlightedCell.y == j}">
-                        <div v-if="createBoard.board[i][j].isBlack" class="m-1 w-10 bg-neutral-800"></div>
-                        <div v-else >
-                            <div class="absolute top-0 left-1 text-xs">
-                                {{createBoard.board[i][j].definitionNumber}}
-                            </div>
-                        </div>
-                    </div>
+                    <BoardCell v-for="m, j in createBoard.width" :x="i" :y="j" @click="handleClick(i, j)"/>
                 </div>
             </div>
             <div>
