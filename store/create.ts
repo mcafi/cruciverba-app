@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { Cell } from "~/models/cell";
+import { Definition } from "~~/models/definition";
 
 export const useCreateBoard = defineStore("createBoard", {
   state: (): {
@@ -13,12 +14,12 @@ export const useCreateBoard = defineStore("createBoard", {
         return { isBlack: false, content: "", definitionNumber: null };
       })
     ),
-    width: 15,
-    height: 12,
+    width: 12,
+    height: 9,
     blackCellsMode: true,
   }),
   getters: {
-    horizontals: (state) => {
+    horizontals: (state): Definition[] => {
       let h = [];
       for (let i = 0; i < state.height; i++) {
         let j = 0;
@@ -27,48 +28,49 @@ export const useCreateBoard = defineStore("createBoard", {
             state.board[i][j].definitionNumber != null &&
             !state.board[i][j + 1].isBlack
           ) {
-            const def = {
+            const def: Definition = {
               definitionNumber: state.board[i][j].definitionNumber,
-              val: "",
+              content: "",
             };
             while (j < state.width && !state.board[i][j].isBlack) {
-              def.val += !!state.board[i][j].content
+              def.content += !!state.board[i][j].content
                 ? state.board[i][j].content
                 : "_";
               j++;
             }
-            h.push(def);
-            j++;
+            if (def.content.length) h.push(def);
           }
           j++;
         }
       }
       return h;
     },
-    verticals: (state) => {
-      let v = [];
+    verticals: (state): Definition[] => {
+      let v: Definition[] = [];
       for (let j = 0; j < state.width; j++) {
-        let i = 0
+        let i = 0;
         while (i < state.height) {
-          if (state.board[i][j].definitionNumber != null && !state.board[i+1][j].isBlack) {
-            const def = {
+          if (
+            state.board[i][j].definitionNumber != null &&
+            !state.board[i + 1][j].isBlack
+          ) {
+            const def: Definition = {
               definitionNumber: state.board[i][j].definitionNumber,
-              val: "", 
-            }
+              content: "",
+            };
             while (i < state.height && !state.board[i][j].isBlack) {
-              def.val += !!state.board[i][j].content
+              def.content += !!state.board[i][j].content
                 ? state.board[i][j].content
                 : "_";
               i++;
             }
-            v.push(def);
-            i++
+            if (def.content.length) v.push(def);
           }
-          i++
+          i++;
         }
       }
-      return v
-    }
+      return v.sort((a, b) => a.definitionNumber - b.definitionNumber);
+    },
   },
   actions: {
     toggleMode() {
@@ -76,6 +78,7 @@ export const useCreateBoard = defineStore("createBoard", {
     },
     toggleCell(x: number, y: number) {
       this.board[x][y].isBlack = !this.board[x][y].isBlack;
+      this.board[x][y].content = "";
       this.calcCellsDefinitions();
     },
     setCellContent(x: number, y: number, content: string) {
