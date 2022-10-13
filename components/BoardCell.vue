@@ -6,7 +6,7 @@
             <div class="absolute top-0 left-1 text-xs">
                 {{cell.definitionNumber}}
             </div>
-            <input type="text" size="1" maxlength="1" class="w-10 h-10 p-3 text-2xl" :value="cell.content"
+            <input type="text" size="1" maxlength="1" class="w-10 h-10 p-2 text-2xl" :value="cell.content"
                 @keypress="handleKeypress" />
         </div>
     </div>
